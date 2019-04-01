@@ -10,6 +10,11 @@
 #endif
 #endif
 
+#import "FSNetwork.h"
+#import "FSNetworkClient.h"
+#import "FSNetworkConfig.h"
+#import "FSNetworkHeader.h"
+#import "FSNetworkRequest.h"
 
 FOUNDATION_EXPORT double FSNetworkVersionNumber;
 FOUNDATION_EXPORT const unsigned char FSNetworkVersionString[];

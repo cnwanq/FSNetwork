@@ -4,6 +4,7 @@ platform :ios, '8.0'
 
 target 'FSNetwork_Example' do
   pod 'FSNetwork', :path => '../'
+  pod 'OHHTTPStubs'
 
   target 'FSNetwork_Tests' do
     inherit! :search_paths

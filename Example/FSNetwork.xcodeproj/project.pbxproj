@@ -39,7 +39,7 @@
 /* Begin PBXFileReference section */
 		0971BB3304B2801D6C0B2625 /* Pods_FSNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FSNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C4310DDFE534B802915040E /* Pods-FSNetwork_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FSNetwork_Example.release.xcconfig"; path = "Target Support Files/Pods-FSNetwork_Example/Pods-FSNetwork_Example.release.xcconfig"; sourceTree = "<group>"; };
-		5135E29F19FF0348BECE1A2C /* FSNetwork.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = FSNetwork.podspec; path = ../FSNetwork.podspec; sourceTree = "<group>"; };
+		5135E29F19FF0348BECE1A2C /* FSNetwork.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FSNetwork.podspec; path = ../FSNetwork.podspec; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* FSNetwork_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FSNetwork_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -63,8 +63,8 @@
 		740DA87CD17D9D1E5FD22B69 /* Pods_FSNetwork_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FSNetwork_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E2FAEEB50FF3A69E1C58A23 /* Pods-FSNetwork_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FSNetwork_Tests.debug.xcconfig"; path = "Target Support Files/Pods-FSNetwork_Tests/Pods-FSNetwork_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9221BC6D631F7BF6525E9287 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		C165D1B4D9B11F011A1A9DC6 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9221BC6D631F7BF6525E9287 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		C165D1B4D9B11F011A1A9DC6 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C34E5A0DEC8E17BAE2815DB9 /* Pods-FSNetwork_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FSNetwork_Tests.release.xcconfig"; path = "Target Support Files/Pods-FSNetwork_Tests/Pods-FSNetwork_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C7A2D67F8CA845670165421F /* Pods-FSNetwork_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FSNetwork_Example.debug.xcconfig"; path = "Target Support Files/Pods-FSNetwork_Example/Pods-FSNetwork_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +103,6 @@
 				7E2FAEEB50FF3A69E1C58A23 /* Pods-FSNetwork_Tests.debug.xcconfig */,
 				C34E5A0DEC8E17BAE2815DB9 /* Pods-FSNetwork_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -249,6 +248,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = wanqijian;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = Q2T8K3RPZ5;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -259,6 +261,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -355,13 +358,19 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FSNetwork_Example/Pods-FSNetwork_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/FSNetwork/FSNetwork.framework",
+				"${BUILT_PRODUCTS_DIR}/OHHTTPStubs/OHHTTPStubs.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSNetwork.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OHHTTPStubs.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -527,6 +536,7 @@
 			baseConfigurationReference = C7A2D67F8CA845670165421F /* Pods-FSNetwork_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Q2T8K3RPZ5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FSNetwork/FSNetwork-Prefix.pch";
 				INFOPLIST_FILE = "FSNetwork/FSNetwork-Info.plist";
@@ -542,6 +552,7 @@
 			baseConfigurationReference = 3C4310DDFE534B802915040E /* Pods-FSNetwork_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Q2T8K3RPZ5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FSNetwork/FSNetwork-Prefix.pch";
 				INFOPLIST_FILE = "FSNetwork/FSNetwork-Info.plist";
