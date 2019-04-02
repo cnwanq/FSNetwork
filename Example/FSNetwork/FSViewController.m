@@ -28,9 +28,12 @@
     FSNetworkRequest *request = [FSNetworkRequest new];
     request.url = @"/";
     request.method = FSRequestGet;
+    request.requestSerializer = FSRequestSerializerHttp;
+    request.responseSerializer = FSResponseSerializerHttp;
+    
     
     [[[request request] then:^id _Nullable(id  _Nullable value) {
-        NSLog(@"%@", value);
+//        NSLog(@"%@", value);
         return nil;
     }] catch:^(NSError * _Nonnull error) {
         NSLog(@"error:%@", error.userInfo);

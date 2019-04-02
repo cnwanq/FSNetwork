@@ -25,7 +25,7 @@
     }
     
     [client handleRequestSerializer:self];
-    [client handleRequestSerializer:self];
+    [client handleResponseSerializer:self];
     
     return [client handleStartRequest:self];
 }

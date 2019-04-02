@@ -7,6 +7,7 @@
 
 #import "FSNetworkClient.h"
 #import "FSNetworkConfig.h"
+#import "FSURLProtocol.h"
 
 
 
@@ -21,10 +22,12 @@ static FSNetworkClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         FSNetworkConfig *config = [FSNetworkConfig defaultConfig];
-        _sharedClient = [[FSNetworkClient alloc] initWithBaseURL:[NSURL URLWithString:config.host]];
+//        _sharedClient = [[FSNetworkClient alloc] initWithBaseURL:[NSURL URLWithString:config.host]];
+        _sharedClient = [[FSNetworkClient alloc] initWithBaseURL:[NSURL URLWithString:config.host] sessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
         _sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         _sharedClient.name = FSNetworkDefalutClientName;
         _sharedClient.config = config;
+        [_sharedClient addAcceptableContextTypeTextHtml];
     });
     return _sharedClient;
 }
@@ -44,14 +47,29 @@ static FSNetworkClient *_sharedClient = nil;
     return [_clientDict valueForKey:name];
 }
 
++ (NSArray<FSNetworkClient *> *)allClients {
+    return [_clientDict allValues];
+}
+
 - (instancetype)initWithName:(NSString *)name config:(FSNetworkConfig *)config  {
-    self = [super initWithBaseURL:[NSURL URLWithString:config.host]];
+    self = [super initWithBaseURL:[NSURL URLWithString:config.host] sessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
     self.name = name;
     self.config = config;
+    [self addAcceptableContextTypeTextHtml];
     
     return self;
 }
+
+
+- (void)addAcceptableContextTypeTextHtml {
+    NSMutableSet *newContentTypes = [NSMutableSet set];
+    // 添加我们需要的类型
+    newContentTypes.set = self.responseSerializer.acceptableContentTypes;
+    [newContentTypes addObject:@"text/html"];
+    self.responseSerializer.acceptableContentTypes = newContentTypes;
+}
+
 
 - (void)handleRequestSerializer:(FSNetworkRequest *)request {
     switch (request.requestSerializer) {

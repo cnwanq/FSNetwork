@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)addClientDictWithName:(NSString *)name
                        client:(FSNetworkClient *)client;
 
++ (NSArray<FSNetworkClient *> *)allClients;
+
 
 - (instancetype)initWithName:(NSString *)name config:(FSNetworkConfig *)config;
 

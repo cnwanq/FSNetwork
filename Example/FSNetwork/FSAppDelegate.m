@@ -7,12 +7,15 @@
 //
 
 #import "FSAppDelegate.h"
+#import "FSURLProtocol.h"
 
 @implementation FSAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    [FSURLProtocol start];
     return YES;
 }
 

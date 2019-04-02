@@ -11,6 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FSURLProtocol : NSURLProtocol
 
++ (void)start;
+
++ (void)end;
+
 @end
 
 NS_ASSUME_NONNULL_END
