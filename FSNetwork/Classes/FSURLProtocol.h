@@ -6,6 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FSNetworkHeader.h"
+#import "FSStubDescriptor.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)start;
 
 + (void)end;
+
++ (instancetype)sharedInstance;
+
++ (void)stubRequestPassingTest:(FSStubsTestBlock)testBlock withStubResponseData:(NSData *)data;
+
++ (void)removeStub:(FSStubDescriptor *)stubDesc;
+
++ (BOOL)passingTestRequset:(NSURLRequest *)request;
 
 @end
 

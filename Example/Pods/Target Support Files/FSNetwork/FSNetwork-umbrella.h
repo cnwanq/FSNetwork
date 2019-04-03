@@ -16,6 +16,7 @@
 #import "FSNetworkHeader.h"
 #import "FSNetworkRequest.h"
 #import "FSSessionConfiguration.h"
+#import "FSStubDescriptor.h"
 #import "FSURLProtocol.h"
 
 FOUNDATION_EXPORT double FSNetworkVersionNumber;

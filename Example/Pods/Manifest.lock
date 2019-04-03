@@ -20,7 +20,7 @@ PODS:
     - FBSnapshotTestCase/Core (~> 2.0)
     - Specta (~> 1.0)
   - FBSnapshotTestCase/Core (2.1.4)
-  - FSNetwork (0.1.0):
+  - FSNetwork (0.2.0):
     - AFNetworking (~> 3.0)
     - PromisesObjC (~> 1.2.7)
   - OHHTTPStubs (7.0.0):
@@ -65,7 +65,7 @@ SPEC CHECKSUMS:
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  FSNetwork: 78305b789b771645cc86b44dbf6e61dd822027ff
+  FSNetwork: f320dbbcf71527c1139435d2722d99cd46393753
   OHHTTPStubs: ef33a2c353110d306bb98f695435ec56ff5a26c3
   PromisesObjC: 7b28ddd1e78cce8f80f1ada927d2217663a9c672
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66

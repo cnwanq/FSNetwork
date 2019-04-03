@@ -13,4 +13,10 @@
 #import "FSNetworkClient.h"
 #import "FSNetworkRequest.h"
 
+#ifdef DEBUG
+#define KSLog(format, ...) printf("class: <%p %s:(%d) > method: %s \n%s\n", self, [[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, __PRETTY_FUNCTION__, [[NSString stringWithFormat:(format), ##__VA_ARGS__] UTF8String] )
+#else
+#define KSLog(format, ...)
+#endif
+
 #endif /* FSNetwork_h */

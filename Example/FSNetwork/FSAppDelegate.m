@@ -16,6 +16,9 @@
     // Override point for customization after application launch.
     
     [FSURLProtocol start];
+//    [FSURLProtocol stubRequestPassingTest:^BOOL(NSURLRequest * _Nonnull request) {
+//        return [request.URL.absoluteString isEqualToString:@"http://www.baidu.com/"];
+//    } withStubResponseData:[@"Baidu data" dataUsingEncoding:NSUTF8StringEncoding]];
     return YES;
 }
 

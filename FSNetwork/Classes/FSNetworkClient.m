@@ -9,8 +9,6 @@
 #import "FSNetworkConfig.h"
 #import "FSURLProtocol.h"
 
-
-
 @implementation FSNetworkClient
 
 static NSDictionary *_clientDict;
@@ -111,11 +109,12 @@ static FSNetworkClient *_sharedClient = nil;
         
         NSURLSessionDataTask *sessionDataTask = nil;
 
+        __weak typeof(self)weakSelf = self;
         switch (request.method) {
             case FSRequestGet:
             {
                 sessionDataTask = [self GET:request.url parameters:request.parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-                    fulfill(responseObject);
+                    [weakSelf handleDataTask:task responseObject:responseObject fulfill:fulfill reject:reject];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     reject(error);
                 }];
@@ -124,7 +123,7 @@ static FSNetworkClient *_sharedClient = nil;
             case FSRequestPost:
             {
                 sessionDataTask = [self POST:request.url parameters:request.parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-                    fulfill(responseObject);
+                    [weakSelf handleDataTask:task responseObject:responseObject fulfill:fulfill reject:reject];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     reject(error);
                 }];
@@ -133,7 +132,7 @@ static FSNetworkClient *_sharedClient = nil;
             case FSRequestPut:
             {
                 sessionDataTask = [self PUT:request.url parameters:request.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-                    fulfill(responseObject);
+                    [weakSelf handleDataTask:task responseObject:responseObject fulfill:fulfill reject:reject];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     reject(error);
                 }];
@@ -142,7 +141,7 @@ static FSNetworkClient *_sharedClient = nil;
             case FSRequestHead:
             {
                 sessionDataTask = [self HEAD:request.url parameters:request.parameters success:^(NSURLSessionDataTask *task) {
-                    fulfill(nil);
+                    [weakSelf handleDataTask:task responseObject:nil fulfill:fulfill reject:reject];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     reject(error);
                 }];
@@ -161,7 +160,7 @@ static FSNetworkClient *_sharedClient = nil;
             case FSRequestDelete:
             {
                 sessionDataTask = [self DELETE:request.url parameters:request.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-                    fulfill(responseObject);
+                    [weakSelf handleDataTask:task responseObject:responseObject fulfill:fulfill reject:reject];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     reject(error);
                 }];
@@ -172,6 +171,23 @@ static FSNetworkClient *_sharedClient = nil;
     return promis;
 }
 
+- (void)handleDataTask:(NSURLSessionDataTask *)task
+                responseObject:(id)responseObject
+                       fulfill:(FBLPromiseFulfillBlock)fulfill
+                        reject:(FBLPromiseRejectBlock)reject {
+    id data = responseObject;
+#if DEBUG
+    NSURLRequest *request = task.currentRequest;
+    if ([FSURLProtocol passingTestRequset:request]) {
+        data = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        
+        fulfill(data);
+        return;
+    }
+#endif
+    fulfill(data);
+    return;
+}
 
 
 

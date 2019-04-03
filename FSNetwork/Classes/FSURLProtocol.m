@@ -8,6 +8,7 @@
 #import "FSURLProtocol.h"
 #import "FSNetworkClient.h"
 #import "FSSessionConfiguration.h"
+#import "FSStubDescriptor.h"
 
 static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
 
@@ -15,8 +16,9 @@ static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
 
 @property (nonatomic, strong) NSURLSession *session;
 
-@end
+@property (nonatomic, strong) NSMutableArray *stubs;
 
+@end
 
 @implementation FSURLProtocol
 
@@ -36,23 +38,51 @@ static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
     }
 }
 
++ (instancetype)sharedInstance {
+    static FSURLProtocol *_sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self alloc] init];
+        _sharedInstance.stubs = [NSMutableArray array];
+    });
+    return _sharedInstance;
+}
+
+
++ (void)stubRequestPassingTest:(FSStubsTestBlock)testBlock withStubResponseData:(NSData *)data {
+    FSStubDescriptor *stub = [FSStubDescriptor stubDescriptorWithTestBlock:testBlock responseData:data];
+    [FSURLProtocol.sharedInstance addStubDescriptor:stub];
+}
+
++ (void)removeStub:(FSStubDescriptor *)stubDesc {
+    [FSURLProtocol.sharedInstance removeStubDescriptor:stubDesc];
+}
+
+- (void)addStubDescriptor:(FSStubDescriptor *)stubDesc {
+    if (stubDesc) {
+        [self.stubs addObject:stubDesc];
+    }
+}
+
+- (void)removeStubDescriptor:(FSStubDescriptor *)stubDesc {
+    if (stubDesc && [self.stubs containsObject:stubDesc]) {
+        [self.stubs removeObject:stubDesc];
+    }
+}
+
+
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
     
     //看看是否已经处理过了，防止无限循环 根据业务来截取
     if ([NSURLProtocol propertyForKey: URLProtocolHandledKey inRequest:request]) {
         return NO;
     }
-//    NSURL *url = request.URL;
-//
-//    NSArray<FSNetworkClient *> *clients = [FSNetworkClient allClients];
-//
-//    for (FSNetworkClient *client in clients) {
-//        if ([client.config.host isEqualToString:url.host]) {
-//            return YES;
-//            break;
-//        }
-//    }
-    return YES;
+    NSURL *url = request.URL;
+    NSString *scheme = url.scheme;
+    if ([scheme hasPrefix:@"http"]) {
+        return YES;
+    }
+    return NO;
 }
 
 /**
@@ -74,19 +104,27 @@ static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
 //开始请求
 - (void)startLoading
 {
-    
-    NSLog(@"***监听接口：%@", self.request.URL.absoluteString);
-    
+//    NSLog(@"***监听接口：%@", self.request.URL.absoluteString);
+
     NSMutableURLRequest *mutableReqeust = [[self request] mutableCopy];
     //标示该request已经处理过了，防止无限循环
     [NSURLProtocol setProperty:@(YES) forKey:URLProtocolHandledKey inRequest:mutableReqeust];
     
     //这个enableDebug随便根据自己的需求了，可以直接拦截到数据返回本地的模拟数据，进行测试
-    BOOL enableDebug = NO;
-    if (enableDebug) {
-        
+#if DEBUG
+    FSStubDescriptor *_stub;
+    NSArray *stubs = FSURLProtocol.sharedInstance.stubs;
+    for (FSStubDescriptor *stub in stubs) {
+        if (stub.testBlock && stub.testBlock(self.request)) {
+            _stub = stub;
+            break;
+        }
+    }
+    if (_stub) {
+        NSData *data = _stub.reponseData;
         NSString *str = @"测试数据";
-        NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+        data = [str dataUsingEncoding:NSUTF8StringEncoding];
+
         NSURLResponse *response = [[NSURLResponse alloc] initWithURL:mutableReqeust.URL
                                                             MIMEType:@"text/plain"
                                                expectedContentLength:data.length
@@ -96,7 +134,10 @@ static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
               cacheStoragePolicy:NSURLCacheStorageNotAllowed];
         [self.client URLProtocol:self didLoadData:data];
         [self.client URLProtocolDidFinishLoading:self];
-    } else {
+        return;
+    }
+#endif
+    {
         //使用NSURLSession继续把request发送出去
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
@@ -104,6 +145,22 @@ static NSString * const URLProtocolHandledKey = @"URLProtocolHandledKey";
         NSURLSessionDataTask *task = [self.session dataTaskWithRequest:mutableReqeust];
         [task resume];
     }
+    
+}
+
++ (BOOL)passingTestRequset:(NSURLRequest *)request {
+    FSStubDescriptor *_stub;
+    NSArray *stubs = FSURLProtocol.sharedInstance.stubs;
+    for (FSStubDescriptor *stub in stubs) {
+        if (stub.testBlock && stub.testBlock(request)) {
+            _stub = stub;
+            break;
+        }
+    }
+    if (_stub) {
+        return YES;
+    }
+    return NO;
 }
 
 //结束请求
