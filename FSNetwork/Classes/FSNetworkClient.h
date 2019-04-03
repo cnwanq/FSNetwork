@@ -10,7 +10,6 @@
 #import "FSNetworkConfig.h"
 #import "FSNetworkRequest.h"
 #import "FSNetworkHeader.h"
-#import <FBLPromises/FBLPromises.h>
 
 
 NS_ASSUME_NONNULL_BEGIN

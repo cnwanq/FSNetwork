@@ -7,6 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
+#if __has_include(<FBLPromises/FBLPromises.h>)
+#import <FBLPromises/FBLPromises.h>
+#elif __has_include(<FBLPromises.h>)
+#import <FBLPromises.h>
+#elif __has_include(<PromisesObjC/FBLPromises.h>)
+#import <PromisesObjC/FBLPromises.h>
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const FSNetworkDefalutClientName;
