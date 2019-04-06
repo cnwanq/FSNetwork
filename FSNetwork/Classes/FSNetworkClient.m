@@ -176,7 +176,7 @@ static FSNetworkClient *_sharedClient = nil;
                        fulfill:(FBLPromiseFulfillBlock)fulfill
                         reject:(FBLPromiseRejectBlock)reject {
     id data = responseObject;
-#if DEBUG
+
     NSURLRequest *request = task.currentRequest;
     Class rClass = [responseObject class];
     
@@ -185,12 +185,21 @@ static FSNetworkClient *_sharedClient = nil;
     }
     data = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:NULL];
     
+#if DEBUG
     if ([FSURLProtocol passingTestRequset:request]) {
         fulfill(data);
         return;
     }
 #endif
-    fulfill(data);
+    if ([data valueForKey:@"success"]) {
+        fulfill([data valueForKey:@"data"]);
+    } else {
+        NSDictionary *err = [data valueForKey:@"error"];
+        NSNumber *code = [err valueForKey:@"code"];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : [err valueForKey:@"meg"]};
+        NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:code.integerValue userInfo:userInfo];
+        reject(error);
+    }
     return;
 }
 
