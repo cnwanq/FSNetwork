@@ -178,9 +178,14 @@ static FSNetworkClient *_sharedClient = nil;
     id data = responseObject;
 #if DEBUG
     NSURLRequest *request = task.currentRequest;
+    Class rClass = [responseObject class];
+    
+    if ([rClass isKindOfClass:[NSString class]]) {
+        data = [responseObject dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    data = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:NULL];
+    
     if ([FSURLProtocol passingTestRequset:request]) {
-        data = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        
         fulfill(data);
         return;
     }
